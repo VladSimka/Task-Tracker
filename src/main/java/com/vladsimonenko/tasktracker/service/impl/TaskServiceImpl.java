@@ -25,7 +25,8 @@ public class TaskServiceImpl implements TaskService {
     public Task getById(Long taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Task not found"));
+                        () -> new ResourceNotFoundException("Task not found")
+                );
     }
 
     @Override

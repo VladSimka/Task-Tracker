@@ -43,9 +43,6 @@ public class TaskServiceImplTest {
 
     @Test
     void getByNonExistingId() {
-        Task expected = new Task();
-        expected.setId(ID);
-
         Mockito.doReturn(Optional.empty())
                 .when(taskRepository).findById(ID);
 

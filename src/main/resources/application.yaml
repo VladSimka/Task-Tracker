@@ -1,3 +1,7 @@
+server:
+  port: 0
+
+
 spring:
   config:
     import: optional:file:.env[.properties]
@@ -11,8 +15,14 @@ spring:
     change-log: classpath:liquibase/db.changelog.yaml
     enabled: true
 
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092,localhost:9094
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 security:
   jwt:
     secret: ${JWT_SECRET}
-    access: 1
-    refresh: 30
+    access: ${JWT_ACCESS}
+    refresh: ${JWT_REFRESH}
