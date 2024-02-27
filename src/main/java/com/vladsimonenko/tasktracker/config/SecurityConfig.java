@@ -66,7 +66,7 @@ public class SecurityConfig {
                                                     .write("Unauthorized.");
                                         }))
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**")
+                        configurer.requestMatchers("/api/v1/auth/**","/swagger-ui/**","/v3/api-docs/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

@@ -64,4 +64,13 @@ public class UserServiceImplTest {
         Mockito.verify(userRepository).findByUsername(USERNAME);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void getByNonExistingUsername() {
+        Mockito.doReturn(Optional.empty())
+                .when(userRepository).findByUsername(USERNAME);
+
+        assertThrows(ResourceNotFoundException.class, () -> userService.getByUsername(USERNAME));
+        Mockito.verify(userRepository).findByUsername(USERNAME);
+    }
 }
