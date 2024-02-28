@@ -2,6 +2,8 @@ package com.vladsimonenko.tasktracker.controller;
 
 import com.vladsimonenko.tasktracker.dto.TaskDto;
 import com.vladsimonenko.tasktracker.dto.UserDto;
+import com.vladsimonenko.tasktracker.dto.validator.OnCreate;
+import com.vladsimonenko.tasktracker.dto.validator.OnUpdate;
 import com.vladsimonenko.tasktracker.mapper.TaskMapper;
 import com.vladsimonenko.tasktracker.mapper.UserMapper;
 import com.vladsimonenko.tasktracker.model.Task;
@@ -10,6 +12,7 @@ import com.vladsimonenko.tasktracker.service.TaskService;
 import com.vladsimonenko.tasktracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,7 +42,11 @@ public class UserController {
 
     @PutMapping
     @PreAuthorize("@cse.canAccessUser(#userDto.id)")
-    public UserDto update(@RequestBody UserDto userDto) {
+    public UserDto update(
+            @RequestBody
+            @Validated(OnUpdate.class)
+            UserDto userDto
+    ) {
         User user = userMapper.toEntity(userDto);
         User updatedUser = userService.update(user);
 
@@ -64,7 +71,8 @@ public class UserController {
 
     @PostMapping("/{id}/tasks")
     @PreAuthorize("@cse.canAccessUser(#userId)")
-    public TaskDto createTask(@PathVariable("id") Long userId, @RequestBody TaskDto taskDto) {
+    public TaskDto createTask(@PathVariable("id") Long userId,
+                              @RequestBody @Validated(OnCreate.class) TaskDto taskDto) {
         Task task = taskMapper.toEntity(taskDto);
         Task created = taskService.create(task, userId);
 

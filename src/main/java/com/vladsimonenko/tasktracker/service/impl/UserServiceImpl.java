@@ -9,15 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.CompletableFuture;
-
-import static com.vladsimonenko.tasktracker.event.KafkaTopics.USER_CREATED_EVENTS_TOPIC;
 
 @Service
 @RequiredArgsConstructor
@@ -94,16 +90,16 @@ public class UserServiceImpl implements UserService {
                 .username(saved.getUsername())
                 .build();
 
-        CompletableFuture<SendResult<Long, UserCreatedEvent>> send =
-                kafkaTemplate.send(USER_CREATED_EVENTS_TOPIC.getName(), saved.getId(), userCreatedEvent);
-
-        send.whenComplete((result, throwable) -> {
-            if (throwable != null) {
-                log.error("Failed to send message: {}", throwable.getMessage());
-            } else {
-                log.info("Message send successfully: {}", result.getRecordMetadata());
-            }
-        });
+//        CompletableFuture<SendResult<Long, UserCreatedEvent>> send =
+//                kafkaTemplate.send(USER_CREATED_EVENTS_TOPIC.getName(), saved.getId(), userCreatedEvent);
+//
+//        send.whenComplete((result, throwable) -> {
+//            if (throwable != null) {
+//                log.error("Failed to send message: {}", throwable.getMessage());
+//            } else {
+//                log.info("Message send successfully: {}", result.getRecordMetadata());
+//            }
+//        });
 
         return saved;
     }

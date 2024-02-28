@@ -10,13 +10,13 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    @Bean
-    public NewTopic createTopic(){
-        return TopicBuilder.name("user-created-events-topic")
-                .partitions(3)
-                .replicas(3)
-                .configs(Map.of("min.insync.replicas","2"))
-                .build();
-
-    }
+//    @Bean
+//    public NewTopic createTopic(){
+//        return TopicBuilder.name("user-created-events-topic")
+//                .partitions(3)
+//                .replicas(3)
+//                .configs(Map.of("min.insync.replicas","2"))
+//                .build();
+//
+//    }
 }

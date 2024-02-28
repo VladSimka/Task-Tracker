@@ -3,11 +3,13 @@ package com.vladsimonenko.tasktracker.controller;
 import com.vladsimonenko.tasktracker.dto.UserDto;
 import com.vladsimonenko.tasktracker.dto.auth.JwtRequest;
 import com.vladsimonenko.tasktracker.dto.auth.JwtResponse;
+import com.vladsimonenko.tasktracker.dto.validator.OnCreate;
 import com.vladsimonenko.tasktracker.mapper.UserMapper;
 import com.vladsimonenko.tasktracker.model.User;
 import com.vladsimonenko.tasktracker.service.AuthService;
 import com.vladsimonenko.tasktracker.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +25,16 @@ public class AuthController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public JwtResponse login(@RequestBody JwtRequest loginRequest) {
+    public JwtResponse login(@RequestBody @Validated JwtRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody UserDto userDto) {
+    public UserDto register(
+            @Validated(OnCreate.class)
+            @RequestBody
+            UserDto userDto
+    ) {
         User user = userMapper.toEntity(userDto);
         User createdUser = userService.create(user);
         return userMapper.toDto(createdUser);

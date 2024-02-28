@@ -66,10 +66,13 @@ public class SecurityConfig {
                                                     .write("Unauthorized.");
                                         }))
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**","/swagger-ui/**","/v3/api-docs/**")
+                        configurer.requestMatchers("/api/v1/auth/**")
                                 .permitAll()
-                                .anyRequest().authenticated()
-                )
+                                .requestMatchers("/swagger-ui/**")
+                                .permitAll()
+                                .requestMatchers("/v3/api-docs/**")
+                                .permitAll()
+                                .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenFilter(tokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

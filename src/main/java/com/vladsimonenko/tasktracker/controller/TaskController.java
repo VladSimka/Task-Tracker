@@ -1,11 +1,13 @@
 package com.vladsimonenko.tasktracker.controller;
 
 import com.vladsimonenko.tasktracker.dto.TaskDto;
+import com.vladsimonenko.tasktracker.dto.validator.OnUpdate;
 import com.vladsimonenko.tasktracker.mapper.TaskMapper;
 import com.vladsimonenko.tasktracker.model.Task;
 import com.vladsimonenko.tasktracker.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +26,11 @@ public class TaskController {
 
     @PutMapping
     @PreAuthorize("@cse.canAccessTask(#taskDto.id)")
-    public TaskDto update(@RequestBody TaskDto taskDto) {
+    public TaskDto update(
+            @RequestBody
+            @Validated(OnUpdate.class)
+            TaskDto taskDto
+    ) {
         Task task = taskMapper.toEntity(taskDto);
         Task updatedTask = taskService.update(task);
         return taskMapper.toDto(updatedTask);
