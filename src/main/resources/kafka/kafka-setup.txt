@@ -1,0 +1,20 @@
+# how to set up cluster with n brokers using kraft
+# first, you should download kafka there https://kafka.apache.org/downloads
+# then, in kafka/config/craft create n files server-i.properties(for example, n = 3)
+# examples of server.properties you can find at kafka/examples
+# you should rewrite such properties as node.id, controller.quorum.voters, listeners, log.dirs
+
+# open terminal
+# go to kafka/bin
+# run commands
+
+# this commands format logs for kraft
+./kafka-storage.sh random-uuid
+./kafka-storage.sh format -t idFromPreviousStep -c ../config/kraft/server-1.properties
+./kafka-storage.sh format -t idFromPreviousStep -c ../config/kraft/server-2.properties
+./kafka-storage.sh format -t idFromPreviousStep -c ../config/kraft/server-3.properties
+
+# this commands start kafka brokers
+./kafka-server-start.sh ../config/kraft/server-1.properties
+./kafka-server-start.sh ../config/kraft/server-2.properties
+./kafka-server-start.sh ../config/kraft/server-3.properties
